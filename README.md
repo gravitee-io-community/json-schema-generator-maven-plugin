@@ -4,6 +4,8 @@ Maven plugin to generate JSON Schemas.
 
 Using the [Jackson JSON Schema Module](https://github.com/FasterXML/jackson-module-jsonSchema) for JSON Schema generation.
 
+[![Build Status](http://build.gravitee.io/jenkins/buildStatus/icon?job=json-schema-generator-maven-plugin)](http://build.gravitee.io/jenkins/view/Tous/job/json-schema-generator-maven-plugin/)
+
 ## Usage
 
 ```xml
