@@ -15,7 +15,7 @@ Using the [Jackson JSON Schema Module](https://github.com/FasterXML/jackson-modu
   <plugin>
    <groupId>io.gravitee.maven.plugins</groupId>
    <artifactId>json-schema-generator-maven-plugin</artifactId>
-   <version>1.0-SNAPSHOT</version>
+   <version>1.0.0-SNAPSHOT</version>
    <executions>
     <execution>
      <phase>prepare-package</phase>
