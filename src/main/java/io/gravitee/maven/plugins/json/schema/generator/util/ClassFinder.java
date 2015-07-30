@@ -32,11 +32,6 @@ import java.util.stream.Collectors;
 public class ClassFinder {
 
     /**
-     * Java package separator character
-     */
-    private static final String PACKAGE_SEPARATOR = ".";
-
-    /**
      * Java class extension
      */
     private static final String CLASS_EXTENSION = ".class";
