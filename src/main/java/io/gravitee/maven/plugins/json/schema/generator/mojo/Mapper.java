@@ -54,37 +54,28 @@ class Mapper {
      */
     public List<JsonSchema> generateJsonSchemas() {
         final List<JsonSchema> generatedSchemas = new ArrayList<>();
+
+        ObjectMapper mapper = new ObjectMapper();
+        SchemaFactoryWrapper schemaVisitor = new SchemaFactoryWrapper();
+//        schemaVisitor.setVisitorContext(new VisitorContext());
+
         for (String className : generateClassNames()) {
             try {
-                JsonSchema schema = generateJsonSchema(getClass().getClassLoader().loadClass(className));
-                if (schema.getId() == null) {
-                    config.getLogger().warn("Skip out non Java Bean class " + className + " on JSON Schema generation.");
-                    continue;
+                try {
+                    mapper.acceptJsonFormatVisitor(mapper.constructType(
+                            getClass().getClassLoader().loadClass(className)
+                    ), schemaVisitor);
+                } catch (JsonMappingException e) {
+                    throw new GenerationException("Unable to format class " + className, e);
                 }
-                generatedSchemas.add(generateJsonSchema(getClass().getClassLoader().loadClass(className)));
             } catch (GenerationException | ClassNotFoundException e) {
                 config.getLogger().warn("Unable to generate JSON schema for class " + className, e);
             }
         }
-        return generatedSchemas;
-    }
 
-    /**
-     * Generate the JSON Schema of the given Class entry
-     *
-     * @param entry the Class from which generate the JSON Schema
-     * @return the JSON Schema of the given Class entry
-     * @throws GenerationException if an error occurs during generation
-     */
-    private JsonSchema generateJsonSchema(Class<?> entry) throws GenerationException {
-        ObjectMapper mapper = new ObjectMapper();
-        SchemaFactoryWrapper schemaVisitor = new SchemaFactoryWrapper();
-        try {
-            mapper.acceptJsonFormatVisitor(mapper.constructType(entry), schemaVisitor);
-        } catch (JsonMappingException e) {
-            throw new GenerationException("Unable to format class " + entry.getName(), e);
-        }
-        return schemaVisitor.finalSchema();
+        generatedSchemas.add(schemaVisitor.finalSchema());
+
+        return generatedSchemas;
     }
 
     /**

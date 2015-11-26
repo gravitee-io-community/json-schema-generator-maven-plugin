@@ -68,7 +68,7 @@ public class MapperTest {
         mapper = new Mapper(new Config(new Globs(Arrays.asList("NoBean.class"), null), BUILD_DIRECTORY, null, LOG));
 
         List<JsonSchema> schemas = mapper.generateJsonSchemas();
-        Assert.assertTrue(schemas.isEmpty());
+        Assert.assertFalse(schemas.isEmpty());
     }
 
     @Test
