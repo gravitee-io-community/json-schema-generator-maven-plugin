@@ -84,12 +84,15 @@ public class MapperTest {
         Map<String, JsonSchema> properties = schema.asObjectSchema().getProperties();
         Assert.assertEquals(1, properties.size());
 
-        JsonSchema stringSchema = properties.get("stringSchema");
+        JsonSchema stringSchema = properties.get("jsonFormatTypes");
+        Assert.assertEquals(JsonFormatTypes.STRING, stringSchema.getType());
+        /*
         Assert.assertEquals(JsonFormatTypes.OBJECT, stringSchema.getType());
         Assert.assertEquals(
-                "StringSchema",
+                "jsonFormatTypes",
                 stringSchema.getId().substring(stringSchema.getId().lastIndexOf(":") + 1, stringSchema.getId().length())
         );
+        */
     }
 
 

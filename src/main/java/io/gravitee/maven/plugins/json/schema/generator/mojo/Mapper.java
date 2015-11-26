@@ -57,7 +57,7 @@ class Mapper {
 
         ObjectMapper mapper = new ObjectMapper();
         SchemaFactoryWrapper schemaVisitor = new SchemaFactoryWrapper();
-//        schemaVisitor.setVisitorContext(new VisitorContext());
+        schemaVisitor.setVisitorContext(new VisitorContext());
 
         for (String className : generateClassNames()) {
             try {

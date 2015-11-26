@@ -15,18 +15,18 @@
  */
 package io.gravitee.maven.plugins.json.schema.generator.mojo.samples;
 
+import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 import com.fasterxml.jackson.module.jsonSchema.types.StringSchema;
 
 public class BeanWithExternalDependency {
 
-    private StringSchema stringSchema;
+    private JsonFormatTypes jsonFormatTypes;
 
-    public BeanWithExternalDependency(StringSchema stringSchema) {
-        this.stringSchema = stringSchema;
+    public BeanWithExternalDependency(JsonFormatTypes jsonFormatTypes) {
+        this.jsonFormatTypes = jsonFormatTypes;
     }
 
-    public StringSchema getStringSchema() {
-        return stringSchema;
+    public JsonFormatTypes getJsonFormatTypes() {
+        return jsonFormatTypes;
     }
-
 }
