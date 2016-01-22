@@ -35,6 +35,8 @@ public class ClassUtils {
      * Java class extension
      */
     public static final String CLASS_EXTENSION = ".class";
+    public static final String WINDOWS_PATH_SEPARATOR = "\\";
+    public static final String WINDOWS_PATH_REGEX_STR = "\\\\";
 
     /**
      * Convert given String path to class name according to the base one.
@@ -76,6 +78,12 @@ public class ClassUtils {
         // Remove the Class extension
         String className = path.substring(0, path.lastIndexOf(CLASS_EXTENSION));
         // And replace any file separators by package ones
-        return className.replaceAll(File.separator, PACKAGE_SEPARATOR);
+        
+        if(File.separator.equals(WINDOWS_PATH_SEPARATOR)){
+            //Its a windows system
+            return className.replaceAll(WINDOWS_PATH_REGEX_STR, PACKAGE_SEPARATOR);
+        }else{
+            return className.replaceAll(File.separator, PACKAGE_SEPARATOR);
+        }
     }
 }
