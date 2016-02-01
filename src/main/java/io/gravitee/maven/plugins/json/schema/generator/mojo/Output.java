@@ -39,6 +39,7 @@ class Output {
      * The associated Mojo configuration
      */
     private Config config;
+    public static final String WINDOWS_PATH_SEPARATOR = "\\";
 
     /**
      * Create a new Output instance based on the given Mojo configuration
@@ -87,7 +88,15 @@ class Output {
         try {
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(schema);
-            Path outputPath = Paths.get(config.getOutputDirectory() + File.separator + schema.getId() + ".json");
+            Path outputPath = null;
+            
+            if( File.separator.equals(WINDOWS_PATH_SEPARATOR)){
+                //Windows not allow ':' in file name, converting with '_'
+                outputPath = Paths.get(config.getOutputDirectory() + File.separator + schema.getId().replaceAll(":", "_") + ".json");
+            }else{
+                outputPath = Paths.get(config.getOutputDirectory() + File.separator + schema.getId() + ".json");
+            }
+             
             Files.write(outputPath, json.getBytes(), StandardOpenOption.WRITE, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
             config.getLogger().info("Created JSON Schema: " + outputPath.normalize().toAbsolutePath().toString());
         } catch (JsonProcessingException e) {
