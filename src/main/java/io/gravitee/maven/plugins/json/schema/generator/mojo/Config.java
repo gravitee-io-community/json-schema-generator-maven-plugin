@@ -17,6 +17,7 @@ package io.gravitee.maven.plugins.json.schema.generator.mojo;
 
 import io.gravitee.maven.plugins.json.schema.generator.util.Globs;
 import org.apache.maven.plugin.logging.Log;
+import org.apache.maven.plugins.annotations.Parameter;
 
 /**
  * Wrapper class to the Mojo configuration
@@ -33,11 +34,13 @@ class Config {
     /**
      * The path to the underlying project build path where to find classes
      */
+    @Parameter(readonly = true, defaultValue = "${project.build.directory}")
     private final String buildDirectory;
 
     /**
      * The JSON Schema generation output directory
      */
+    @Parameter(readonly = true, defaultValue = "${project.build.directory}/schema")
     private final String outputDirectory;
 
     /**
