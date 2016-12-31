@@ -78,10 +78,12 @@ public class OutputTest {
     public void testWriteWithCorrectSchema() throws Exception {
         output.write(Arrays.asList(SCHEMA));
 
-        Path outputPath = Paths.get(outputDirectory.normalize().toAbsolutePath() + File.separator + SCHEMA.getId() + ".json");
+        // replace all : with _ this is a reserved character in some file systems
+        Path outputPath = Paths.get(outputDirectory.normalize().toAbsolutePath() + File.separator + SCHEMA.getId().replace(':', '_') + ".json");
         String actual = new String(Files.readAllBytes(outputPath));
 
-        Assert.assertEquals(STRING_SCHEMA, actual);
+        // correct line endings Linux / Windows
+        Assert.assertEquals(STRING_SCHEMA, actual.replace("\r\n", "\n"));
     }
 
     @Test(expected = NullPointerException.class)

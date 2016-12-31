@@ -77,6 +77,8 @@ public class ClassUtils {
 
         // Remove the Class extension
         String className = path.substring(0, path.lastIndexOf(CLASS_EXTENSION));
+        // replace all slashes - this is also used under Windows
+        className = className.replaceAll("/", PACKAGE_SEPARATOR);
         // And replace any file separators by package ones
         
         if(File.separator.equals(WINDOWS_PATH_SEPARATOR)){
