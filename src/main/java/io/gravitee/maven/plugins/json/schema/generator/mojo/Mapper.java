@@ -69,15 +69,16 @@ class Mapper {
                 } catch (JsonMappingException e) {
                     throw new GenerationException("Unable to format class " + className, e);
                 }
-                JsonSchema schema = schemaVisitor.finalSchema();
-                if (schema == null) {
-                    throw new IllegalArgumentException("Could not build schema or find any classes.");
-                }
-                generatedSchemas.add(schema);
             } catch (GenerationException | ClassNotFoundException e) {
                 config.getLogger().warn("Unable to generate JSON schema for class " + className, e);
             }
         }
+        JsonSchema schema = schemaVisitor.finalSchema();
+        if (schema == null) {
+            throw new IllegalArgumentException("Could not build schema or find any classes.");
+        }
+        generatedSchemas.add(schema);
+
         return generatedSchemas;
     }
 
