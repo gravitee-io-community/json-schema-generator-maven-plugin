@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
 import io.gravitee.maven.plugins.json.schema.generator.util.ClassFinder;
+import org.apache.maven.plugin.MojoExecutionException;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -68,13 +69,15 @@ class Mapper {
                 } catch (JsonMappingException e) {
                     throw new GenerationException("Unable to format class " + className, e);
                 }
+                JsonSchema schema = schemaVisitor.finalSchema();
+                if (schema == null) {
+                    throw new IllegalArgumentException("Could not build schema or find any classes.");
+                }
+                generatedSchemas.add(schema);
             } catch (GenerationException | ClassNotFoundException e) {
                 config.getLogger().warn("Unable to generate JSON schema for class " + className, e);
             }
         }
-
-        generatedSchemas.add(schemaVisitor.finalSchema());
-
         return generatedSchemas;
     }
 

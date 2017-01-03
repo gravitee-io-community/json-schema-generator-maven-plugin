@@ -24,6 +24,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +36,7 @@ public class MapperTest {
 
     private static final Log LOG = Mockito.mock(Log.class);
 
-    private static final String BUILD_DIRECTORY = MapperTest.class.getResource("/").getPath();
+    private static final String BUILD_DIRECTORY = new File(MapperTest.class.getResource("/").getPath()).getAbsolutePath();
 
     private Mapper mapper;
 

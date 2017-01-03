@@ -18,6 +18,7 @@ package io.gravitee.maven.plugins.json.schema.generator.util;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -29,7 +30,7 @@ import java.util.List;
  */
 public class ClassFinderTest {
 
-    private static final Path ROOT_PATH = Paths.get(ClassFinder.class.getResource("./samples").getPath());
+    private static final Path ROOT_PATH = Paths.get(new File(ClassFinder.class.getResource("./samples").getPath()).getAbsolutePath());
 
     private static final Globs EMPTY_GLOBS = new Globs(null, null);
     private static final Globs JUST_INCLUDED_GLOBS = new Globs(Arrays.asList(new String[]{"**/One.class"}), null);
@@ -88,7 +89,8 @@ public class ClassFinderTest {
 
     @Test
     public void testFindClassNamesByUsingTheFormatGlobProcess() throws Exception {
-        Path rootPath = Paths.get(ClassFinder.class.getResource(".").getPath());
+        // must be turned into a valid file path before
+        Path rootPath = Paths.get(new File(ClassFinder.class.getResource(".").getPath()).getAbsolutePath());
         List<String> expected = Arrays.asList(new String[]{"samples.One"});
         List<String> actual = ClassFinder.findClassNames(rootPath, new Globs(Arrays.asList(new String[]{"One.class"}), null));
         Collections.sort(actual);
