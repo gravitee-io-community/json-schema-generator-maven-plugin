@@ -88,15 +88,9 @@ class Output {
         try {
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(schema);
-            Path outputPath = null;
-            
-            if( File.separator.equals(WINDOWS_PATH_SEPARATOR)){
-                //Windows not allow ':' in file name, converting with '_'
-                outputPath = Paths.get(config.getOutputDirectory() + File.separator + schema.getId().replaceAll(":", "_") + ".json");
-            }else{
-                outputPath = Paths.get(config.getOutputDirectory() + File.separator + schema.getId() + ".json");
-            }
-             
+
+            // replace all : with _ this is a reserved character in some file systems
+            Path  outputPath = Paths.get(config.getOutputDirectory() + File.separator + schema.getId().replaceAll(":", "_") + ".json");
             Files.write(outputPath, json.getBytes(), StandardOpenOption.WRITE, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
             config.getLogger().info("Created JSON Schema: " + outputPath.normalize().toAbsolutePath().toString());
         } catch (JsonProcessingException e) {
