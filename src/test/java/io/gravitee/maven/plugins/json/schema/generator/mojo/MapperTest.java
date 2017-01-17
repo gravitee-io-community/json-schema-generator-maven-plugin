@@ -73,6 +73,14 @@ public class MapperTest {
     }
 
     @Test
+    public void testGenerateJsonSchemasWithRecursive() throws Exception {
+        mapper = new Mapper(new Config(new Globs(Arrays.asList("Recursive.class"), null), BUILD_DIRECTORY, null, LOG));
+
+        List<JsonSchema> schemas = mapper.generateJsonSchemas();
+        Assert.assertFalse(schemas.isEmpty());
+    }
+
+    @Test
     public void testGenerateJsonSchemasWithBeanByUsingExternalDependency() throws Exception {
         mapper = new Mapper(new Config(new Globs(Arrays.asList("BeanWithExternalDependency.class"), null), BUILD_DIRECTORY, null, LOG));
 
@@ -86,7 +94,7 @@ public class MapperTest {
         Assert.assertEquals(1, properties.size());
 
         JsonSchema stringSchema = properties.get("jsonFormatTypes");
-        Assert.assertEquals(JsonFormatTypes.STRING, stringSchema.getType());
+        Assert.assertEquals(JsonFormatTypes.OBJECT, stringSchema.getType());
         /*
         Assert.assertEquals(JsonFormatTypes.OBJECT, stringSchema.getType());
         Assert.assertEquals(
