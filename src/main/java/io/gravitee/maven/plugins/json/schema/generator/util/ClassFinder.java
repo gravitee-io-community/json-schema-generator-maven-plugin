@@ -35,20 +35,21 @@ public class ClassFinder {
 		 Validate.isTrue(root.toFile().isDirectory(),"Unable to handle non existing or non directory root path");
 		 Validate.notNull(globs, "Unable to handle null globs");
 
-        List<String> matchedClassNames = new ArrayList<>(); System.out.println("ClassFinder::findClassNames LINE 58 root="+root);
+        List<String> matchedClassNames = new ArrayList<>(); 
+        System.out.println("ClassFinder::findClassNames LINE 58 root="+root);
         System.out.println("ClassFinder::findClassNames LINE 59 globs="+globs);
         System.out.println("ClassFinder::findClassNames LINE 60 matchedClassNames="+matchedClassNames);
         //System.out.println("ClassFinder::findClassNames LINE 61 matchedClassNames.addAll(findClassPaths(root,globs)="+matchedClassNames.addAll(findClassPaths(root,globs)));
-		//System.out.println("ClassFinder::findClassNames LINE 62 matchedClassNames.addAll(findClassPaths(root,globs).stream()="+matchedClassNames.addAll(findClassPaths(root,globs).stream()));
-		//System.out.println("ClassFinder::findClassNames LINE 63 matchedClassNames.addAll(findClassPaths(root,globs).collect(Collectors.toList())="+matchedClassNames.addAll(findClassPaths(root,globs).collect(Collectors.toList())));
-		//System.out.println("ClassFinder::findClassNames LINE 63 matchedClassNames.addAll(findClassPaths(root,globs).map(path -> ClassUtils.convertClassPathToClassName(path.toString(),root.normalize().toString()))="+ java.util.Collection<java.nio.file.Path> collection=findClassPaths(root, globs));
-		System.out.println("ClassFinder::findClassNames LINE 64 collection="+collection);
-		for(int i=0;i<collection.size();i++)
-		{
-			matchedClassNames.add(collection.toArray()[i].toString());
-		}
-		//        boolean
-		b=((List<String>)matchedClassNames).addAll(collectionStrings);
+	//System.out.println("ClassFinder::findClassNames LINE 62 matchedClassNames.addAll(findClassPaths(root,globs).stream()="+matchedClassNames.addAll(findClassPaths(root,globs).stream()));
+	//System.out.println("ClassFinder::findClassNames LINE 63 matchedClassNames.addAll(findClassPaths(root,globs).collect(Collectors.toList())="+matchedClassNames.addAll(findClassPaths(root,globs).collect(Collectors.toList())));
+	//System.out.println("ClassFinder::findClassNames LINE 63 matchedClassNames.addAll(findClassPaths(root,globs).map(path -> ClassUtils.convertClassPathToClassName(path.toString(),root.normalize().toString()))="+ java.util.Collection<java.nio.file.Path> collection=findClassPaths(root, globs));
+	System.out.println("ClassFinder::findClassNames LINE 64 collection="+collection);
+	for(int i=0;i<collection.size();i++)
+	{
+		matchedClassNames.add(collection.toArray()[i].toString());
+	}
+	//        
+		 boolean b=((List<String>)matchedClassNames).addAll(collectionStrings);
 		System.out.println("ClassFinder::findClassNames LINE 61 outputStream="+outputStream);
 		if(outputStream!=null)
 		{
