@@ -56,19 +56,20 @@ public class ClassFinderTest {
 
     @Test
     public void testFindClassNamesWithEmptyGlobs() throws Exception {
-        //List<String> expected = Arrays.asList(new String[]{"One", "Three", "Two"}); //this is stupid use the full path for each of the classes
+        //List<String> expected = Arrays.asList(new String[]{"One", "Three", "Two"}); //we should use the full path for each of the classes
         List<String> expected = Arrays.asList(new String[]{oneClass, oneClass, threeClass, threeClass, twoClass, twoClass});
         List<String> actual = ClassFinder.findClassNames(ROOT_PATH, EMPTY_GLOBS);
         Collections.sort(actual);
-
         Assert.assertEquals(expected, actual);
     }
+	
     public String oneClass=new String(".\\target\\test-classes\\io\\gravitee\\maven\\plugins\\json\\schema\\generator\\util\\samples\\One.class");
-	public String twoClass=new String(".\\target\\test-classes\\io\\gravitee\\maven\\plugins\\json\\schema\\generator\\util\\samples\\Two.class");
+    public String twoClass=new String(".\\target\\test-classes\\io\\gravitee\\maven\\plugins\\json\\schema\\generator\\util\\samples\\Two.class");
     public String threeClass=new String(".\\target\\test-classes\\io\\gravitee\\maven\\plugins\\json\\schema\\generator\\util\\samples\\Three.class");
+	
     @Test
     public void testFindClassNamesWithJustIncludedGlobs() throws Exception {
-       // List<String> expected = Arrays.asList(new String[]{"One"}); //this is stupid test ...we need to use the full classpath for samples/One.class instead
+       // List<String> expected = Arrays.asList(new String[]{"One"}); //we need to use the full classpath for samples/One.class instead
         List<String> expected = Arrays.asList(new String[]{oneClass,oneClass});
         List<String> actual = ClassFinder.findClassNames(Paths.get(new File(ClassFinder.class.getResource("./samples").getPath()).getAbsolutePath()),
         												new Globs(Arrays.asList(new String[]{"**/One.class"}), null));
@@ -78,21 +79,19 @@ public class ClassFinderTest {
 
     @Test
     public void testFindClassNamesWithJustExcludedGlobs() throws Exception {
-        //List<String> expected = Arrays.asList(new String[]{"Three", "Two"}); //thius is stupid we shoud use the fullpath
+        //List<String> expected = Arrays.asList(new String[]{"Three", "Two"}); //we shoud use the fullpath
         List<String> expected = Arrays.asList(new String[]{threeClass, threeClass, twoClass, twoClass});
         List<String> actual = ClassFinder.findClassNames(ROOT_PATH, JUST_EXCLUDED_GLOBS);
         Collections.sort(actual);
-
         Assert.assertEquals(expected, actual);
     }
 
     @Test
     public void testFindClassNamesWithBothIncludedAndExcludedGlobs() throws Exception {
-        //List<String> expected = Arrays.asList(new String[]{"One", "Three"}); //this is stupid we should use fullpath for One.class and Three.class
+        //List<String> expected = Arrays.asList(new String[]{"One", "Three"}); //we should use fullpath for One.class and Three.class
         List<String> expected = Arrays.asList(new String[]{oneClass, oneClass, threeClass, threeClass});
         List<String> actual = ClassFinder.findClassNames(ROOT_PATH, BOTH_INCLUDED_AND_EXCLUDED_GLOBS);
         Collections.sort(actual);
-
         Assert.assertEquals(expected, actual);
     }
 
@@ -100,11 +99,10 @@ public class ClassFinderTest {
     public void testFindClassNamesByUsingTheFormatGlobProcess() throws Exception {
         // must be turned into a valid file path before
         Path rootPath = Paths.get(new File(ClassFinder.class.getResource(".").getPath()).getAbsolutePath());
-        //List<String> expected = Arrays.asList(new String[]{"samples.One"}); //this is stupid..we should use the full path for One.class instead
+        //List<String> expected = Arrays.asList(new String[]{"samples.One"}); //we should use the full path for One.class instead
         List<String> expected = Arrays.asList(new String[]{oneClass, oneClass});
         List<String> actual = ClassFinder.findClassNames(rootPath, new Globs(Arrays.asList(new String[]{"One.class"}), null));
         Collections.sort(actual);
-
         Assert.assertEquals(expected, actual);
     }
 
