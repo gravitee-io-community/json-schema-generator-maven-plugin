@@ -95,8 +95,8 @@ public class ClassFinder {
 		 return matchedPaths;
 	}
 
-    /** * Visit a given root Path by getting class Paths that match the list of given glob patterns */ private static class
-	 GlobsMatchingClassFileVisitor extends SimpleFileVisitor<Path>
+    /** * Visit a given root Path by getting class Paths that match the list of given glob patterns */
+	private static class GlobsMatchingClassFileVisitor extends SimpleFileVisitor<Path>
 	 {
         /** * The associated GlobPathMatchers */
         private final GlobPathMatchers globPathMatchers;
@@ -113,7 +113,7 @@ public class ClassFinder {
 			this.globPathMatchers = new GlobPathMatchers(globs);
 			System.out.println("ClassFinder::GlobsMatchingClassFileVisitor( globPathMatchers="+globPathMatchers);
 			this.matchedPaths = matchedPaths;
-		}
+	}
 
         /** * Simplify glob writing by automatically add the double wildcard pattern
           * * @param glob the glob to format * @return a new formatted glob */
@@ -125,59 +125,59 @@ public class ClassFinder {
           * @return always FileVisitResult.CONTINUE */
         public FileVisitResult visitFile(Path path, BasicFileAttributes fileAttributes)
         { // If Path is not a class file then continue
-         	if (!path.getFileName().toString().endsWith(CLASS_EXTENSION)) { return FileVisitResult.CONTINUE; }
+            if (!path.getFileName().toString().endsWith(CLASS_EXTENSION)) { return FileVisitResult.CONTINUE; }
 
             // Do not keep classes matching the excluded globs
             for (PathMatcher excludedMatcher : globPathMatchers.getExcludedMatchers())
             {
 				if(excludedMatcher.matches(path)) { return FileVisitResult.CONTINUE; }
-			}
+	    }
 
             // If there is no included paths, then keep them all
             if (globPathMatchers.getIncludedMatchers().isEmpty())
             {
-				matchedPaths.add(path);
-			    return FileVisitResult.CONTINUE;
-			}
+		matchedPaths.add(path);
+		return FileVisitResult.CONTINUE;
+	    }
 
             // Else only keep Path matching the included paths
             for (PathMatcher includedMatcher : globPathMatchers.getIncludedMatchers())
             {
-				if (includedMatcher.matches(path)) { matchedPaths.add(path); return FileVisitResult.CONTINUE; }
-			}
+		if (includedMatcher.matches(path)) { matchedPaths.add(path); return FileVisitResult.CONTINUE; }
+	    }
             return FileVisitResult.CONTINUE;
          }
 
         /** * Wrapper to included/excluded PathMachers */
          private static class GlobPathMatchers
          { /** * PathMatcher list of included paths */
-		 	private final List<PathMatcher> includedMatchers;
+	    private final List<PathMatcher> includedMatchers;
 
             /** * PathMatcher list of excluded paths */
             private final List<PathMatcher> excludedMatchers;
 
             /** * Create a new instance based on the given Globs * * @param globs the based Globs to create included/excluded PathMatchers */
-			public GlobPathMatchers(Globs globs)
-			{
-				this.includedMatchers = new ArrayList<>();
-				System.out.println("ClassFinder::GlobPathMatchers(Globs) LINE 165 globs="+globs);
-				System.out.println("ClassFinder::GlobPathMatchers(Globs) LINE 166 globs.getIncludes()="+globs.getIncludes());
-				System.out.println("ClassFinder::GlobPathMatchers(Globs) LINE 167 globs.getIncludes().stream()="+globs.getIncludes().stream().map(include -> FileSystems.getDefault().getPathMatcher("glob:" + formatGlob(include))));
-				System.out.println("ClassFinder::GlobPathMatchers(Globs) LINE 168 globs.getIncludes().stream().collect(Collectors.toList())="+globs.getIncludes().stream());
-				System.out.println("ClassFinder::GlobPathMatchers(Globs) LINE 169 globs.getIncludes().stream().collect(Collectors.toList())="+globs.getIncludes().stream().collect(Collectors.toList()));
-				System.out.println("ClassFinder::GlobPathMatchers(Globs) LINE 170 globs.getIncludes().map(include -> FileSystems.getDefault().getPathMatcher('glob:' + formatGlob(include))"+globs.getIncludes().stream().map(include -> FileSystems.getDefault().getPathMatcher("glob:" + formatGlob(include))));
-				includedMatchers.addAll(globs.getIncludes() .stream() .map(include -> FileSystems.getDefault().getPathMatcher("glob:" + formatGlob(include))).collect(Collectors.toList()) );
-				System.out.println("ClassFinder::GlobPathMatchers(Globs) LINE 176 includedMatchers="+includedMatchers);
-				this.excludedMatchers = new ArrayList<>();
-				System.out.println("ClassFinder::GlobPathMatchers LINE 178 globs.getExcludes()="+globs.getExcludes());
-				//System.out.println("ClassFinder::GlobPathMatchers LINE 179 globs.getExcludes().stream()="+stream());
-			 	System.out.println("ClassFinder::GlobPathMatchers LINE 180 globs.getExcludes().stream().collect(Collectors.toList())="+globs.getExcludes().stream().collect(Collectors.toList()));
-			 	//System.out.println("ClassFinder::GlobPathMatchers LINE 181 exclude="+exclude -> FileSystems.getDefault().getPathMatcher("glob:" + formatGlob(exclude)));
-			 	//System.out.println("ClassFinder::GlobPathMatchers LINE 182 formatGlob(exclude)=" + exclude -> FileSystems.getDefault().getPathMatcher("glob:" + formatGlob(exclude)) );
-			 	System.out.println("ClassFinder::GlobPathMatchers LINE 183 globs.getExcludes().stream().map(exclude -> FileSystems.getDefault().getPathMatcher('glob:' + formatGlob(exclude)))="+globs.getExcludes().stream().map(exclude -> FileSystems.getDefault().getPathMatcher("glob:" +formatGlob(exclude))));
-			 	excludedMatchers.addAll(globs.getExcludes() .stream() .map(exclude -> FileSystems.getDefault().getPathMatcher("glob:" + formatGlob(exclude))) .collect(Collectors.toList()) );
-			 	System.out.println("ClassFinder::GlobPathMatchers LINE 189 excludedMatchers="+excludedMatchers);
-			 }
+	    public GlobPathMatchers(Globs globs)
+	    {
+		this.includedMatchers = new ArrayList<>();
+		System.out.println("ClassFinder::GlobPathMatchers(Globs) LINE 165 globs="+globs);
+		System.out.println("ClassFinder::GlobPathMatchers(Globs) LINE 166 globs.getIncludes()="+globs.getIncludes());
+		System.out.println("ClassFinder::GlobPathMatchers(Globs) LINE 167 globs.getIncludes().stream()="+globs.getIncludes().stream().map(include -> FileSystems.getDefault().getPathMatcher("glob:" + formatGlob(include))));
+		System.out.println("ClassFinder::GlobPathMatchers(Globs) LINE 168 globs.getIncludes().stream().collect(Collectors.toList())="+globs.getIncludes().stream());
+		System.out.println("ClassFinder::GlobPathMatchers(Globs) LINE 169 globs.getIncludes().stream().collect(Collectors.toList())="+globs.getIncludes().stream().collect(Collectors.toList()));
+		System.out.println("ClassFinder::GlobPathMatchers(Globs) LINE 170 globs.getIncludes().map(include -> FileSystems.getDefault().getPathMatcher('glob:' + formatGlob(include))"+globs.getIncludes().stream().map(include -> FileSystems.getDefault().getPathMatcher("glob:" + formatGlob(include))));
+		includedMatchers.addAll(globs.getIncludes() .stream() .map(include -> FileSystems.getDefault().getPathMatcher("glob:" + formatGlob(include))).collect(Collectors.toList()) );
+		System.out.println("ClassFinder::GlobPathMatchers(Globs) LINE 176 includedMatchers="+includedMatchers);
+		this.excludedMatchers = new ArrayList<>();
+		System.out.println("ClassFinder::GlobPathMatchers LINE 178 globs.getExcludes()="+globs.getExcludes());
+		//System.out.println("ClassFinder::GlobPathMatchers LINE 179 globs.getExcludes().stream()="+stream());
+		System.out.println("ClassFinder::GlobPathMatchers LINE 180 globs.getExcludes().stream().collect(Collectors.toList())="+globs.getExcludes().stream().collect(Collectors.toList()));
+		//System.out.println("ClassFinder::GlobPathMatchers LINE 181 exclude="+exclude -> FileSystems.getDefault().getPathMatcher("glob:" + formatGlob(exclude)));
+		//System.out.println("ClassFinder::GlobPathMatchers LINE 182 formatGlob(exclude)=" + exclude -> FileSystems.getDefault().getPathMatcher("glob:" + formatGlob(exclude)) );
+		System.out.println("ClassFinder::GlobPathMatchers LINE 183 globs.getExcludes().stream().map(exclude -> FileSystems.getDefault().getPathMatcher('glob:' + formatGlob(exclude)))="+globs.getExcludes().stream().map(exclude -> FileSystems.getDefault().getPathMatcher("glob:" +formatGlob(exclude))));
+		excludedMatchers.addAll(globs.getExcludes() .stream() .map(exclude -> FileSystems.getDefault().getPathMatcher("glob:" + formatGlob(exclude))) .collect(Collectors.toList()) );
+		System.out.println("ClassFinder::GlobPathMatchers LINE 189 excludedMatchers="+excludedMatchers);
+	    }
 
             /** * @return the list of included PathMatchers */
             public List<PathMatcher> getIncludedMatchers() { return includedMatchers; }
@@ -187,4 +187,3 @@ public class ClassFinder {
          }
     }
 }
-
