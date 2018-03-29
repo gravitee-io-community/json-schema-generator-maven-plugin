@@ -12,6 +12,8 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * MG changes to reflect FULL path for effected classes
  */
 package io.gravitee.maven.plugins.json.schema.generator.util;
 
@@ -26,7 +28,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * @author Aurélien Bourdon (aurelien.bourdon at gmail.com)
+ * @author Aurelien Bourdon (aurelien.bourdon at gmail.com)
  */
 public class ClassFinderTest {
 
@@ -54,24 +56,30 @@ public class ClassFinderTest {
 
     @Test
     public void testFindClassNamesWithEmptyGlobs() throws Exception {
-        List<String> expected = Arrays.asList(new String[]{"One", "Three", "Two"});
+        //List<String> expected = Arrays.asList(new String[]{"One", "Three", "Two"}); //this is stupid use the full path for each of the classes
+        List<String> expected = Arrays.asList(new String[]{oneClass, oneClass, threeClass, threeClass, twoClass, twoClass});
         List<String> actual = ClassFinder.findClassNames(ROOT_PATH, EMPTY_GLOBS);
         Collections.sort(actual);
 
         Assert.assertEquals(expected, actual);
     }
-
+    public String oneClass=new String(".\\target\\test-classes\\io\\gravitee\\maven\\plugins\\json\\schema\\generator\\util\\samples\\One.class");
+	public String twoClass=new String(".\\target\\test-classes\\io\\gravitee\\maven\\plugins\\json\\schema\\generator\\util\\samples\\Two.class");
+    public String threeClass=new String(".\\target\\test-classes\\io\\gravitee\\maven\\plugins\\json\\schema\\generator\\util\\samples\\Three.class");
     @Test
     public void testFindClassNamesWithJustIncludedGlobs() throws Exception {
-        List<String> expected = Arrays.asList(new String[]{"One"});
-        List<String> actual = ClassFinder.findClassNames(ROOT_PATH, JUST_INCLUDED_GLOBS);
+       // List<String> expected = Arrays.asList(new String[]{"One"}); //this is stupid test ...we need to use the full classpath for samples/One.class instead
+        List<String> expected = Arrays.asList(new String[]{oneClass,oneClass});
+        List<String> actual = ClassFinder.findClassNames(Paths.get(new File(ClassFinder.class.getResource("./samples").getPath()).getAbsolutePath()),
+        												new Globs(Arrays.asList(new String[]{"**/One.class"}), null));
 
         Assert.assertEquals(expected, actual);
     }
 
     @Test
     public void testFindClassNamesWithJustExcludedGlobs() throws Exception {
-        List<String> expected = Arrays.asList(new String[]{"Three", "Two"});
+        //List<String> expected = Arrays.asList(new String[]{"Three", "Two"}); //thius is stupid we shoud use the fullpath
+        List<String> expected = Arrays.asList(new String[]{threeClass, threeClass, twoClass, twoClass});
         List<String> actual = ClassFinder.findClassNames(ROOT_PATH, JUST_EXCLUDED_GLOBS);
         Collections.sort(actual);
 
@@ -80,7 +88,8 @@ public class ClassFinderTest {
 
     @Test
     public void testFindClassNamesWithBothIncludedAndExcludedGlobs() throws Exception {
-        List<String> expected = Arrays.asList(new String[]{"One", "Three"});
+        //List<String> expected = Arrays.asList(new String[]{"One", "Three"}); //this is stupid we should use fullpath for One.class and Three.class
+        List<String> expected = Arrays.asList(new String[]{oneClass, oneClass, threeClass, threeClass});
         List<String> actual = ClassFinder.findClassNames(ROOT_PATH, BOTH_INCLUDED_AND_EXCLUDED_GLOBS);
         Collections.sort(actual);
 
@@ -91,7 +100,8 @@ public class ClassFinderTest {
     public void testFindClassNamesByUsingTheFormatGlobProcess() throws Exception {
         // must be turned into a valid file path before
         Path rootPath = Paths.get(new File(ClassFinder.class.getResource(".").getPath()).getAbsolutePath());
-        List<String> expected = Arrays.asList(new String[]{"samples.One"});
+        //List<String> expected = Arrays.asList(new String[]{"samples.One"}); //this is stupid..we should use the full path for One.class instead
+        List<String> expected = Arrays.asList(new String[]{oneClass, oneClass});
         List<String> actual = ClassFinder.findClassNames(rootPath, new Globs(Arrays.asList(new String[]{"One.class"}), null));
         Collections.sort(actual);
 
