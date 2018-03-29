@@ -127,7 +127,7 @@
                 <version>3.5.1</version>
                 <configuration>
                 	<source>1.8</source> <!-- new -->
-                	<target>1.8</target> <!-- new --
+                	<target>1.8</target> <!-- new -->
                 </configuration>
             <dependencies>
             <!-- add joda -->
