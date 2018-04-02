@@ -121,6 +121,29 @@
                     </execution>
                 </executions>
             </plugin>
+
+                        <plugin>
+            	<groupId>com.mycila</groupId>
+            	<artifactId>license-maven-plugin</artifactId>
+            	<version>2.11</version>
+            	<executions>
+             		<execution>
+             	 		<phase>initialize</phase>
+              			<goals>
+                			<goal>check</goal>
+              			</goals>
+              			<configuration>
+              			       <excludes>
+				            <exclude>**/*.adoc</exclude>      <!-- skip adoc files -->
+				            <exclude>**/Jenkinsfile</exclude> <!-- skip Jenkinsfile -->
+				            <exclude>**/LICENSE.txt</exclude> <!-- skip LICENSE.txt  -->
+				            <exclude>**/Wrong.txt</exclude>   <!-- skip Wrong.txt  -->
+        				</excludes>
+        		        </configuration>
+             		</execution>
+            	</executions>
+            </plugin>
+
         </plugins>
     </build>
 
