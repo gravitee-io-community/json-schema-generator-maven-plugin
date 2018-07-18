@@ -58,5 +58,16 @@ public class GlobsTest {
         Assert.assertEquals(INCLUDES, globs.getIncludes());
         Assert.assertEquals(EXCLUDES, globs.getExcludes());
     }
-
+	
+    private static final List<String> DAVE_EXCLUDES = Arrays.asList(new String[]{"./io/gravitee/maven/plugins/json/schema/generator/util/samples/Three.class"});
+    @Test
+    public void testForDave() {
+		System.out.println("GlobsTest:testForDave LINE 43 before globs = new Globs(null,DAVE_EXCLUDES) DAVE_EXCLUDES="+DAVE_EXCLUDES);
+		Globs globs = new Globs(null,DAVE_EXCLUDES);
+		System.out.println("GlobsTest:testForDave LINE 44 globs="+globs);
+		System.out.println("GlobsTest:testForDave LINE 45 DAVE_EXCLUDES="+DAVE_EXCLUDES);
+		System.out.println("GlobsTest:testForDave LINE 45 before Assert.assertEquals(EXCLUDES, globs.getExcludes()) where globs.getExcludes()="+globs.getExcludes());
+		Assert.assertEquals(DAVE_EXCLUDES, globs.getExcludes());
+		System.out.println("GlobsTest:testForDave LINE 49");
+   }
 }
