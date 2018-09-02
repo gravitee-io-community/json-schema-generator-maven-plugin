@@ -95,7 +95,7 @@ class Output {
             config.getLogger().info("Created JSON Schema: " + outputPath.normalize().toAbsolutePath().toString());
         } catch (JsonProcessingException e) {
             config.getLogger().warn("Unable to display schema " + schema.getId(), e);
-        } catch (IOException e) {
+        } catch (Exception e) {
             config.getLogger().warn("Unable to write Json file for schema " + schema.getId(), e);
         }
     }

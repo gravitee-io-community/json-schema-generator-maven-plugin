@@ -72,7 +72,11 @@ class Mapper {
                 }
                 JsonSchema schema = schemaVisitor.finalSchema();
                 if (schema == null) {
-                    throw new IllegalArgumentException("Could not build schema or find any classes.");
+                    throw new IllegalArgumentException("Could not build schema for class '"+className+"'.");
+                }
+                if (schema.getId() == null) {
+                    config.getLogger().warn("Ignoring invalid schema for class '"+className+"'.");
+                    continue;
                 }
                 generatedSchemas.add(schema);
             } catch (GenerationException | ClassNotFoundException e) {

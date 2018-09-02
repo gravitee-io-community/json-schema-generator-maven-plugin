@@ -39,6 +39,7 @@ public class LinkVisitorContext extends VisitorContext {
         return type.getRawClass() != String.class
                 && !isBoxedPrimitive(type)
                 && !type.isPrimitive()
+                && !type.isEnumType()
                 && !type.isMapLikeType()
                 && !type.isCollectionLikeType();
     }

@@ -26,6 +26,7 @@ import org.mockito.Mockito;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -69,7 +70,7 @@ public class MapperTest {
         mapper = new Mapper(new Config(new Globs(Arrays.asList("NoBean.class"), null), BUILD_DIRECTORY, null, LOG));
 
         List<JsonSchema> schemas = mapper.generateJsonSchemas();
-        Assert.assertFalse(schemas.isEmpty());
+        Assert.assertTrue(schemas.isEmpty());
     }
 
     @Test
@@ -94,14 +95,9 @@ public class MapperTest {
         Assert.assertEquals(1, properties.size());
 
         JsonSchema stringSchema = properties.get("jsonFormatTypes");
-        Assert.assertEquals(JsonFormatTypes.OBJECT, stringSchema.getType());
-        /*
-        Assert.assertEquals(JsonFormatTypes.OBJECT, stringSchema.getType());
-        Assert.assertEquals(
-                "jsonFormatTypes",
-                stringSchema.getId().substring(stringSchema.getId().lastIndexOf(":") + 1, stringSchema.getId().length())
-        );
-        */
+        Assert.assertEquals(JsonFormatTypes.STRING, stringSchema.getType());
+        Assert.assertEquals(new HashSet<>(Arrays.asList("string", "number", "integer",
+                "boolean", "object", "array", "null", "any")), stringSchema.asValueTypeSchema().getEnums());
     }
 
 
