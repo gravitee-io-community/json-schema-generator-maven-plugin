@@ -15,13 +15,16 @@
  */
 package io.gravitee.maven.plugins.json.schema.generator.mojo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyName;
+import com.fasterxml.jackson.databind.introspect.Annotated;
+import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import com.fasterxml.jackson.module.jsonSchema.customProperties.HyperSchemaFactoryWrapper;
 import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
 import io.gravitee.maven.plugins.json.schema.generator.util.ClassFinder;
-import org.apache.maven.plugin.MojoExecutionException;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -50,6 +53,22 @@ class Mapper {
     }
 
     /**
+     * WRITE_ONLY fields are no output to the schema. This is incorrect.
+     * From https://stackoverflow.com/a/55064740/3351474
+     */
+    private class IgnoreJacksonWriteOnlyAccess extends JacksonAnnotationIntrospector {
+
+        @Override
+        public JsonProperty.Access findPropertyAccess(Annotated m) {
+            JsonProperty.Access access = super.findPropertyAccess(m);
+            if (access == JsonProperty.Access.WRITE_ONLY) {
+                return JsonProperty.Access.AUTO;
+            }
+            return access;
+        }
+    }
+
+    /**
      * Generates JSON Schemas from the matched Class names
      *
      * @return a list of JSON Schemas from the matched Class names
@@ -58,24 +77,29 @@ class Mapper {
         final List<JsonSchema> generatedSchemas = new ArrayList<>();
 
         ObjectMapper mapper = new ObjectMapper();
+        mapper.setAnnotationIntrospector(new IgnoreJacksonWriteOnlyAccess());
         SchemaFactoryWrapper schemaVisitor = new HyperSchemaFactoryWrapper();
         schemaVisitor.setVisitorContext(new LinkVisitorContext());
 
         for (String className : generateClassNames()) {
             try {
+                Class<?> _class = getClass().getClassLoader().loadClass(className);
                 try {
-                    mapper.acceptJsonFormatVisitor(mapper.constructType(
-                            getClass().getClassLoader().loadClass(className)
-                    ), schemaVisitor);
+                    mapper.acceptJsonFormatVisitor(mapper.constructType(_class), schemaVisitor);
                 } catch (JsonMappingException e) {
                     throw new GenerationException("Unable to format class " + className, e);
                 }
                 JsonSchema schema = schemaVisitor.finalSchema();
                 if (schema == null) {
-                    throw new IllegalArgumentException("Could not build schema for class '"+className+"'.");
+                    throw new IllegalArgumentException("Could not build schema for class "+className);
                 }
                 if (schema.getId() == null) {
-                    config.getLogger().warn("Ignoring invalid schema for class '"+className+"'.");
+                    if (_class.isEnum()) {
+                        config.getLogger().info("Skipping enum class " + className + " (will be included directly in referenced schema)");
+                    }
+                    else {
+                        config.getLogger().warn("Ignoring schema for class " + className);
+                    }
                     continue;
                 }
                 generatedSchemas.add(schema);
