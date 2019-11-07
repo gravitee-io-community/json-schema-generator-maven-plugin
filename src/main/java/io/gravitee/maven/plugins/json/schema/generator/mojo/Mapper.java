@@ -17,6 +17,7 @@ package io.gravitee.maven.plugins.json.schema.generator.mojo;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import com.fasterxml.jackson.module.jsonSchema.customProperties.HyperSchemaFactoryWrapper;
 import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
@@ -58,6 +59,7 @@ class Mapper {
         final List<JsonSchema> generatedSchemas = new ArrayList<>();
 
         ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
         SchemaFactoryWrapper schemaVisitor = new HyperSchemaFactoryWrapper();
         schemaVisitor.setVisitorContext(new LinkVisitorContext());
 
