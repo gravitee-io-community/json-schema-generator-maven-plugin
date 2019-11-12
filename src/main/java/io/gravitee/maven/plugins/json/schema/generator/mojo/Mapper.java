@@ -17,8 +17,11 @@ package io.gravitee.maven.plugins.json.schema.generator.mojo;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
+import com.fasterxml.jackson.module.jsonSchema.JsonSchemaGenerator;
 import com.fasterxml.jackson.module.jsonSchema.customProperties.HyperSchemaFactoryWrapper;
 import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
 import io.gravitee.maven.plugins.json.schema.generator.util.ClassFinder;
@@ -60,23 +63,25 @@ class Mapper {
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
+        mapper.registerModule(new Jdk8Module());
+        mapper.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
         SchemaFactoryWrapper schemaVisitor = new HyperSchemaFactoryWrapper();
         schemaVisitor.setVisitorContext(new LinkVisitorContext());
 
+        JsonSchemaGenerator SCHEMA_GEN = new JsonSchemaGenerator(mapper);
+
         for (String className : generateClassNames()) {
             try {
+                JsonSchema schema = null;
                 try {
-                    mapper.acceptJsonFormatVisitor(mapper.constructType(
-                            getClass().getClassLoader().loadClass(className)
-                    ), schemaVisitor);
+                    schema = SCHEMA_GEN.generateSchema(getClass().getClassLoader().loadClass(className));
+                    if (schema == null) {
+                        throw new IllegalArgumentException("Could not build schema or find any classes.");
+                    }
+                    generatedSchemas.add(schema);
                 } catch (JsonMappingException e) {
                     throw new GenerationException("Unable to format class " + className, e);
                 }
-                JsonSchema schema = schemaVisitor.finalSchema();
-                if (schema == null) {
-                    throw new IllegalArgumentException("Could not build schema or find any classes.");
-                }
-                generatedSchemas.add(schema);
             } catch (GenerationException | ClassNotFoundException e) {
                 config.getLogger().warn("Unable to generate JSON schema for class " + className, e);
             }
