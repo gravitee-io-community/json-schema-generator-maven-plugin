@@ -26,6 +26,7 @@ import io.gravitee.maven.plugins.json.schema.generator.util.ClassFinder;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -58,7 +59,7 @@ class Mapper {
         final List<JsonSchema> generatedSchemas = new ArrayList<>();
 
         ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
+        mapper.registerModule(new JavaTimeModule()).setDateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"));
         mapper.registerModule(new Jdk8Module());
 
         JsonSchemaGenerator jsonSchemaGenerator = new JsonSchemaGenerator(mapper);
