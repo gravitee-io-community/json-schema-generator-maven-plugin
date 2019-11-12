@@ -94,7 +94,7 @@ public class MapperTest {
         Assert.assertEquals(1, properties.size());
 
         JsonSchema stringSchema = properties.get("jsonFormatTypes");
-        Assert.assertEquals(JsonFormatTypes.OBJECT, stringSchema.getType());
+        Assert.assertEquals(JsonFormatTypes.STRING, stringSchema.getType());
         /*
         Assert.assertEquals(JsonFormatTypes.OBJECT, stringSchema.getType());
         Assert.assertEquals(
