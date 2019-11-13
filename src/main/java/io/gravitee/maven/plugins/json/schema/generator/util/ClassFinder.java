@@ -63,10 +63,6 @@ public class ClassFinder {
                 .stream()
                 .map(path -> ClassUtils.convertClassPathToClassName(path.toString(), root.normalize().toString()))
                 .collect(Collectors.toList()));
-        for(String matchedClassName : matchedClassNames) {
-            System.out.println("class: " + matchedClassName);
-        }
-        System.out.println("classsssssssssss");
         try {
             if(Objects.nonNull(globs.getScanPackage()) && Objects.nonNull(globs.getParentClass())) {
                 Reflections reflections = new Reflections(globs.getScanPackage());
@@ -74,7 +70,6 @@ public class ClassFinder {
                     Class subTypeClass = (Class) subType;
                     if(!Modifier.isAbstract(subTypeClass.getModifiers()) && !Modifier.isInterface(subTypeClass.getModifiers())) {
                         matchedClassNames.add(subTypeClass.getName());
-                        System.out.println("class: " + subTypeClass.getName());
                     }
                 }
             }
@@ -170,7 +165,7 @@ public class ClassFinder {
             return FileVisitResult.CONTINUE;
         }
 
-        /**
+        /*
          * Wrapper to included/excluded PathMachers
          */
         private static class GlobPathMatchers {
