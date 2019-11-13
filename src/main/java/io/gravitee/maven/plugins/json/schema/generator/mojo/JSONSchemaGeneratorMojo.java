@@ -47,6 +47,12 @@ public class JSONSchemaGeneratorMojo extends AbstractMojo {
     @Parameter(property = "includes")
     private List<String> includes;
 
+    @Parameter(property = "parentClass")
+    private String parentClass;
+
+    @Parameter(property = "scanPackage")
+    private String scanPackage;
+
     /**
      * The list of globs used to exclude classes for the generation
      */
@@ -68,7 +74,7 @@ public class JSONSchemaGeneratorMojo extends AbstractMojo {
     public void execute() throws MojoExecutionException, MojoFailureException {
         // First, create configuration based on Mojo parameters
         Config config = new Config(
-                new Globs(getIncludes(), getExcludes()),
+                new Globs(getIncludes(), getExcludes(), getParentClass(), getScanPackage()),
                 getBuildDirectory(),
                 getOutputDirectory(),
                 getLog()
@@ -111,4 +117,11 @@ public class JSONSchemaGeneratorMojo extends AbstractMojo {
         return outputDirectory;
     }
 
+    public String getParentClass() {
+        return parentClass;
+    }
+
+    public String getScanPackage() {
+        return scanPackage;
+    }
 }

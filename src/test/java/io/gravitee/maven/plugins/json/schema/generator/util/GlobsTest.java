@@ -33,28 +33,28 @@ public class GlobsTest {
 
     @Test
     public void testGlobsCreationWithNullIncludes() {
-        Globs globs = new Globs(null, EXCLUDES);
+        Globs globs = new Globs(null, EXCLUDES, null, null);
         Assert.assertEquals(Collections.<String>emptyList(), globs.getIncludes());
         Assert.assertEquals(EXCLUDES, globs.getExcludes());
     }
 
     @Test
     public void testGlobsCreationWithNullExcludes() {
-        Globs globs = new Globs(INCLUDES, null);
+        Globs globs = new Globs(INCLUDES, null, null, null);
         Assert.assertEquals(INCLUDES, globs.getIncludes());
         Assert.assertEquals(Collections.<String>emptyList(), globs.getExcludes());
     }
 
     @Test
     public void testGlobsCreationWithNullBothIncludesAndExclude() {
-        Globs globs = new Globs(null, null);
+        Globs globs = new Globs(null, null, null, null);
         Assert.assertEquals(Collections.<String>emptyList(), globs.getIncludes());
         Assert.assertEquals(Collections.<String>emptyList(), globs.getExcludes());
     }
 
     @Test
     public void testGlobsCreationWithNonNullBothIncludesAndExclude() {
-        Globs globs = new Globs(INCLUDES, EXCLUDES);
+        Globs globs = new Globs(INCLUDES, EXCLUDES, null, null);
         Assert.assertEquals(INCLUDES, globs.getIncludes());
         Assert.assertEquals(EXCLUDES, globs.getExcludes());
     }

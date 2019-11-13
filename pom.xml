@@ -21,7 +21,7 @@
     <groupId>io.gravitee.maven.plugins</groupId>
     <artifactId>json-schema-generator-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
-    <version>1.4.0-ROCHE</version>
+    <version>1.4.2-ROCHE</version>
     <name>JSON Schema generator Maven plugin</name>
 
     <parent>
@@ -92,7 +92,11 @@
             <artifactId>jackson-datatype-jdk8</artifactId>
             <version>${jackson-module.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.9.9-RC1</version>
+        </dependency>
         <!-- Test scope -->
         <dependency>
             <groupId>junit</groupId>
