@@ -34,6 +34,10 @@ public class Globs {
      */
     private final List<String> excludes;
 
+    private String parentClass;
+
+    private String scanPackage;
+
     /**
      * Create a new instance based on the given included/excluded list of globs
      * <p/>
@@ -41,10 +45,14 @@ public class Globs {
      *
      * @param includes the included list of globs
      * @param excludes the excluded list of globs
+     * @param parentClass parent class of concrete one where json schema is generated from
+     * @param scanPackage root package where the implemented parentclass should be searched
      */
-    public Globs(List<String> includes, List<String> excludes) {
+    public Globs(List<String> includes, List<String> excludes, String parentClass, String scanPackage) {
         this.includes = includes == null ? new ArrayList<String>() : includes;
         this.excludes = excludes == null ? new ArrayList<String>() : excludes;
+        this.parentClass = parentClass;
+        this.scanPackage = scanPackage;
     }
 
     /**
@@ -59,6 +67,14 @@ public class Globs {
      */
     public List<String> getExcludes() {
         return excludes;
+    }
+
+    public String getParentClass() {
+        return parentClass;
+    }
+
+    public String getScanPackage() {
+        return scanPackage;
     }
 
     @Override

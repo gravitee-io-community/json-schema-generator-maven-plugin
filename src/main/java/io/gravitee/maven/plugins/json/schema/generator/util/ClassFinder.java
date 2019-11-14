@@ -16,12 +16,16 @@
 package io.gravitee.maven.plugins.json.schema.generator.util;
 
 import org.apache.commons.lang3.Validate;
+import org.reflections.Reflections;
 
 import java.io.IOException;
+import java.lang.reflect.Modifier;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -59,6 +63,19 @@ public class ClassFinder {
                 .stream()
                 .map(path -> ClassUtils.convertClassPathToClassName(path.toString(), root.normalize().toString()))
                 .collect(Collectors.toList()));
+        try {
+            if(Objects.nonNull(globs.getScanPackage()) && Objects.nonNull(globs.getParentClass())) {
+                Reflections reflections = new Reflections(globs.getScanPackage());
+                for(Object subType : reflections.getSubTypesOf(Class.forName(globs.getParentClass()))) {
+                    Class subTypeClass = (Class) subType;
+                    if(!Modifier.isAbstract(subTypeClass.getModifiers()) && !Modifier.isInterface(subTypeClass.getModifiers())) {
+                        matchedClassNames.add(subTypeClass.getName());
+                    }
+                }
+            }
+        } catch (ClassNotFoundException e) {
+            throw new IllegalStateException(e);
+        }
         return matchedClassNames;
     }
 
@@ -133,9 +150,7 @@ public class ClassFinder {
                 }
             }
 
-            // If there is no included paths, then keep them all
             if (globPathMatchers.getIncludedMatchers().isEmpty()) {
-                matchedPaths.add(path);
                 return FileVisitResult.CONTINUE;
             }
 
@@ -150,7 +165,7 @@ public class ClassFinder {
             return FileVisitResult.CONTINUE;
         }
 
-        /**
+        /*
          * Wrapper to included/excluded PathMachers
          */
         private static class GlobPathMatchers {
@@ -171,17 +186,19 @@ public class ClassFinder {
              */
             public GlobPathMatchers(Globs globs) {
                 this.includedMatchers = new ArrayList<>();
-                includedMatchers.addAll(globs.getIncludes()
-                                .stream()
-                                .map(include -> FileSystems.getDefault().getPathMatcher("glob:" + formatGlob(include)))
-                                .collect(Collectors.toList())
-                );
                 this.excludedMatchers = new ArrayList<>();
-                excludedMatchers.addAll(globs.getExcludes()
-                                .stream()
-                                .map(exclude -> FileSystems.getDefault().getPathMatcher("glob:" + formatGlob(exclude)))
-                                .collect(Collectors.toList())
-                );
+                if (!Objects.nonNull(globs.getScanPackage()) && !Objects.nonNull(globs.getParentClass())) {
+                    includedMatchers.addAll(globs.getIncludes()
+                            .stream()
+                            .map(include -> FileSystems.getDefault().getPathMatcher("glob:" + formatGlob(include)))
+                            .collect(Collectors.toList())
+                    );
+                    excludedMatchers.addAll(globs.getExcludes()
+                        .stream()
+                        .map(exclude -> FileSystems.getDefault().getPathMatcher("glob:" + formatGlob(exclude)))
+                        .collect(Collectors.toList())
+                    );
+                }
             }
 
             /**
@@ -197,6 +214,7 @@ public class ClassFinder {
             public List<PathMatcher> getExcludedMatchers() {
                 return excludedMatchers;
             }
+
         }
 
     }

@@ -18,8 +18,10 @@ package io.gravitee.maven.plugins.json.schema.generator.mojo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
+import com.google.common.io.NullOutputStream;
 import org.apache.commons.lang3.Validate;
 
+import javax.validation.constraints.Null;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -85,7 +87,9 @@ class Output {
      * @param schema the JSON schema to write into file
      */
     private void createJsonFile(JsonSchema schema) {
+
         try {
+            if(schema.getId() == null) return;
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(schema);
 

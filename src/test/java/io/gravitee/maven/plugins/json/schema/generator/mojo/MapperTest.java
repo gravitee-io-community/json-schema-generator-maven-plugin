@@ -47,7 +47,7 @@ public class MapperTest {
 
     @Test
     public void testGenerateJsonSchemasWithSimpleBean() throws Exception {
-        mapper = new Mapper(new Config(new Globs(Arrays.asList("SimpleBean.class"), null), BUILD_DIRECTORY, null, LOG));
+        mapper = new Mapper(new Config(new Globs(Arrays.asList("SimpleBean.class"), null, null, null), BUILD_DIRECTORY, null, LOG));
 
         List<JsonSchema> schemas = mapper.generateJsonSchemas();
         Assert.assertEquals(1, schemas.size());
@@ -66,7 +66,7 @@ public class MapperTest {
 
     @Test
     public void testGenerateJsonSchemasWithNoBean() throws Exception {
-        mapper = new Mapper(new Config(new Globs(Arrays.asList("NoBean.class"), null), BUILD_DIRECTORY, null, LOG));
+        mapper = new Mapper(new Config(new Globs(Arrays.asList("NoBean.class"), null, null, null), BUILD_DIRECTORY, null, LOG));
 
         List<JsonSchema> schemas = mapper.generateJsonSchemas();
         Assert.assertFalse(schemas.isEmpty());
@@ -74,7 +74,7 @@ public class MapperTest {
 
     @Test
     public void testGenerateJsonSchemasWithRecursive() throws Exception {
-        mapper = new Mapper(new Config(new Globs(Arrays.asList("Recursive.class"), null), BUILD_DIRECTORY, null, LOG));
+        mapper = new Mapper(new Config(new Globs(Arrays.asList("Recursive.class"), null, null, null), BUILD_DIRECTORY, null, LOG));
 
         List<JsonSchema> schemas = mapper.generateJsonSchemas();
         Assert.assertFalse(schemas.isEmpty());
@@ -82,7 +82,7 @@ public class MapperTest {
 
     @Test
     public void testGenerateJsonSchemasWithBeanByUsingExternalDependency() throws Exception {
-        mapper = new Mapper(new Config(new Globs(Arrays.asList("BeanWithExternalDependency.class"), null), BUILD_DIRECTORY, null, LOG));
+        mapper = new Mapper(new Config(new Globs(Arrays.asList("BeanWithExternalDependency.class"), null, null, null), BUILD_DIRECTORY, null, LOG));
 
         List<JsonSchema> schemas = mapper.generateJsonSchemas();
         Assert.assertEquals(1, schemas.size());
@@ -94,7 +94,7 @@ public class MapperTest {
         Assert.assertEquals(1, properties.size());
 
         JsonSchema stringSchema = properties.get("jsonFormatTypes");
-        Assert.assertEquals(JsonFormatTypes.OBJECT, stringSchema.getType());
+        Assert.assertEquals(JsonFormatTypes.STRING, stringSchema.getType());
         /*
         Assert.assertEquals(JsonFormatTypes.OBJECT, stringSchema.getType());
         Assert.assertEquals(
